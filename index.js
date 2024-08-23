@@ -2,9 +2,7 @@ import express from "express";
 import path from "path";
 import postRoutes from "./routes/postRoutes.js";
 import connectDB from "./config/database.js";
-
-import post from "./models/post.js";
-import { ConnectionReadyEvent } from "mongodb";
+import Post from "./models/post.js";
 import { fileURLToPath } from "url";
 
 const app = express();
@@ -25,8 +23,8 @@ app.get("/", function (req, res) {
 app.use("/", postRoutes);
 
 async function start() {
-  const client = await connectDB();
-  await post.injectDB(client);
+  const client = await connectDB(); // 연결된 client를 받음
+  await Post.injectDB(client); // client를 Post 클래스에 전달
 
   app.listen(port, () => {
     console.log("서버 실행중...");
@@ -43,4 +41,5 @@ async function start() {
     }
   });
 }
+
 start();
