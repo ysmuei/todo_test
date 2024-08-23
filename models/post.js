@@ -2,38 +2,34 @@ let db;
 
 class Post {
   static async injectDB(conn) {
+    if (db) return;
     try {
-      db = conn.db("todo");
-      await client.connect();
+      db = await conn.db("todo");
     } catch (e) {
-      console.log("DB연결실패", e);
+      console.error("DB 연결 실패", e);
     }
   }
 
   static async getAll() {
-    return await db
-      .collection("posts")
-      .find()
-      .sort({ _id: -1 })
-      // .limit(3) // 필요시 주석 해제
-      .toArray();
+    return await db.collection("posts").find().sort({ _id: -1 }).toArray();
+  }
+
+  static async getOne(id) {
+    return await db.collection("posts").findOne({ _id: id });
   }
 
   static async create(postData) {
-    return await db.collection("posts").insertone(postData);
+    return await db.collection("posts").insertOne(postData);
   }
 
-  static async delete(postData) {
-    return await db.collection("posts").deleteone({ _id: postId });
-  }
-
-  static async getOne(postId) {
-    return await db.collection("post").find({ _id: postId });
-  }
-  static async update(postId, postData) {
+  static async update(id, postData) {
     return await db
       .collection("posts")
-      .updateOne({ _id: postId }, { $set: postData });
+      .updateOne({ _id: id }, { $set: postData });
+  }
+
+  static async delete(id) {
+    return await db.collection("posts").deleteOne({ _id: id });
   }
 }
 

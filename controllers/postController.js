@@ -13,8 +13,7 @@ export const listPosts = async (req, res) => {
 export const createPost = async (req, res) => {
   try {
     await Post.create(req.body);
-    const posts = await Post.getAll();
-    res.render("list", { posts });
+    res.redirect("list");
   } catch (err) {
     res.status(500).send("서버 오류가 발생했습니다.");
   }
@@ -29,8 +28,7 @@ export const deletePost = async (req, res) => {
         success: false,
       });
     } else {
-      const posts = await Post.getAll();
-      res.json({ message: "성공적으로 삭제되었습니다.", success: true, posts });
+      res.json({ message: "성공적으로 삭제되었습니다.", success: true });
     }
   } catch (err) {
     res.status(500).json({ message: "서버 에러" });
@@ -38,9 +36,8 @@ export const deletePost = async (req, res) => {
 };
 
 export const getPostDetails = async (req, res) => {
-  const _id = new ObjectId(req.params.id);
   try {
-    const post = await Post.getOne(_id);
+    const post = await Post.getOne(new ObjectId(req.params.id));
     if (!post) {
       return res.status(404).send("게시물을 찾을 수 없습니다.");
     }
@@ -64,13 +61,12 @@ export const getEditPost = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   try {
-    const _id = new ObjectId(req.params.id);
-    const result = await Post.update(_id, req.body);
+    const result = await Post.update(new ObjectId(req.params.id), req.body);
     if (result.modifiedCount === 1) {
       res.json({
         success: true,
         message: "수정 완료",
-        redirectUrl: `/detail/${_id.toString()}`,
+        redirectUrl: `/detail/${req.params.id}`,
       });
     } else {
       res.status(404).json({
