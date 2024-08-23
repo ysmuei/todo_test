@@ -1,12 +1,11 @@
 {
-  "name": "study0822",
+  "name": "todos",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "build": "npm install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm install"
   },
   "engines": {
     "node": "20.x"
@@ -19,6 +18,6 @@
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "mongodb": "^6.8.0",
-    "vercel": "^37.1.0"
+    "vercel": "^37.0.0"
   }
 }
